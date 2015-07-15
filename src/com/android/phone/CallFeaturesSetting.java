@@ -210,7 +210,7 @@ public class CallFeaturesSetting extends PreferenceActivity
 
     private static final String BUTTON_INCALL_EVENTS_KEY = "button_show_ssn_key";
     private static final String SIM_CATEGORY_KEY  = "sim_category_key";
-    private static final String USE_NON_INTRUSIVE_CALL_KEY = "use_non_intrusive_call";
+
     private Intent mContactListIntent;
 
     /** Event for Async voicemail change call */
@@ -302,7 +302,6 @@ public class CallFeaturesSetting extends PreferenceActivity
     private AccountSelectionPreference mDefaultOutgoingAccount;
     private boolean isSpeedDialListStarted = false;
     private PreferenceScreen mButtonBlacklist;
-    private SwitchPreference mUseNonIntrusiveCall;
 
     private class VoiceMailProvider {
         public VoiceMailProvider(String name, Intent intent) {
@@ -691,10 +690,6 @@ public class CallFeaturesSetting extends PreferenceActivity
             int index = mCallRecordingFormat.findIndexOfValue((String) objValue);
             Settings.System.putInt(cr, Settings.System.CALL_RECORDING_FORMAT, value);
             mCallRecordingFormat.setSummary(mCallRecordingFormat.getEntries()[index]);
-        } else if (preference == mUseNonIntrusiveCall) {
-            final boolean val = (Boolean) objValue;
-            Settings.System.putInt(getContentResolver(),
-                    Settings.System.USE_NON_INTRUSIVE_CALL, val ? 1 : 0);
         }
         // always let the preference setting proceed.
         return true;
@@ -1774,10 +1769,6 @@ public class CallFeaturesSetting extends PreferenceActivity
             mProxSpeakerDelay.multiplyValue(100);
             mProxSpeakerDelay.setOnPreferenceChangeListener(this);
         }
-        mUseNonIntrusiveCall = (SwitchPreference) findPreference(USE_NON_INTRUSIVE_CALL_KEY);
-        if (mUseNonIntrusiveCall != null) {
-            mUseNonIntrusiveCall.setOnPreferenceChangeListener(this);
-        }
 
         if (mButtonDTMF != null) {
             if (getResources().getBoolean(R.bool.dtmf_type_enabled)) {
@@ -1971,10 +1962,6 @@ public class CallFeaturesSetting extends PreferenceActivity
             } else {
                 mIPPrefixPreference.setSummary(ip_prefix);
             }
-		}
-        if (mUseNonIntrusiveCall != null) {
-            mUseNonIntrusiveCall.setChecked(Settings.System.getInt(getContentResolver(),
-                Settings.System.USE_NON_INTRUSIVE_CALL, 1) != 0);
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
